@@ -1,6 +1,10 @@
 # Script to monitor player status on Steam.
 # Used for avoiding certain players / stacks.
 
+# Set URL of Steam user (must be public profile):
+url = "https://steamcommunity.com/profiles/76561198042309013/"
+dotabuff_url = "https://www.dotabuff.com/players/82043285"
+
 ##### PACKAGES ##### 
 import requests                                 # package for downloading page
 from bs4 import BeautifulSoup                   # import BeautifulSoup (parse downloaded page)
@@ -87,9 +91,6 @@ fr = 1
 # Check status indefinitely.
 while True:
 
-    # Set URL of Steam user (must be public profile):
-    url = "https://steamcommunity.com/profiles/76561198042309013/"
-
     # Set the headers of a browser.
     headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
@@ -122,7 +123,7 @@ while True:
         # If the scraped game is specified...
         if game == "Dota 2":
             print("Scraping latest Dotabuff details...")
-            dotabuff_url = "https://www.dotabuff.com/players/82043285"
+            
             time_ago = dotabuff_scrape(dotabuff_url, headers)
             print("Last match was " + str(time_ago.seconds//3600) + " hours " + str(((time_ago.seconds//60)%60)) + " minutes" + " ago.")
 
