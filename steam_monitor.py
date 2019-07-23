@@ -2,8 +2,8 @@
 # Used for avoiding certain players / stacks.
 
 # Set URL of Steam user (must be public profile):
-url = "https://steamcommunity.com/profiles/76561198042309013/"
-dotabuff_url = "https://www.dotabuff.com/players/82043285"
+url = "https://steamcommunity.com/id/panozzles/"
+dotabuff_url = "https://www.dotabuff.com/players/55239776"
 
 ##### PACKAGES ##### 
 import requests                                 # package for downloading page
@@ -16,6 +16,7 @@ from datetime import datetime, timedelta        # for timestamping
 def name_scrape():
     name = []
     url_title = str(soup.find(lambda tag:tag.name=="title" and "Steam Community" in tag.text))
+    
     for c in url_title:
         if c is ':':
             curr = url_title.index(c)+2
@@ -50,35 +51,13 @@ def dotabuff_scrape(dotabuff_url, headers):
     dotabuff_response = requests.get(dotabuff_url, headers=headers)
     dotabuff_soup = BeautifulSoup(dotabuff_response.text, "lxml")
     string_soup = str(dotabuff_soup)
+
+    # Find the first tag with "datetime" (most recent game) and extract time data (index is exact).
     index = string_soup.find("datetime")
-    datetime_str = string_soup[index:index+50]
-
-    # Gets the date and time for the last match.
-    last_match = []
-    for c in datetime_str:
-        if c is "\"":
-            curr = datetime_str.index("\"") + 1
-            while datetime_str[curr] != "\"":
-                last_match.append(datetime_str[curr])
-                curr += 1
-            break
-        else:
-            continue
-    last_match = "".join(last_match)
-
-    # Reformats the date and time by removing + signs and adding spaces.
-    formatted_str = []
-    for c in last_match:
-        if c is '-' or c is ':' or c.isdigit() is True:
-            formatted_str.append(c)
-        elif c is '+':
-            break
-        else:
-            formatted_str.append(' ')
-    formatted_str = "".join(formatted_str)
+    datetime_str = string_soup[index+10:index+20] + " " + string_soup[index+21:index+29]
 
     # Turns the formatted time into a datetime object, and finds the current difference in time (after converting from GMT 00:00).
-    time_diff = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "%Y-%m-%d %H:%M:%S") - (datetime.strptime(formatted_str, "%Y-%m-%d %H:%M:%S") + timedelta(hours=10))
+    time_diff = datetime.strptime(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "%Y-%m-%d %H:%M:%S") - (datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S") + timedelta(hours=10))
 
     # Returns a timedelta object.
     return time_diff
@@ -130,6 +109,6 @@ while True:
     # Change first run to 0.
     fr = 0
 
-    # Sleep for 5 minutes.
-    time.sleep(300)
+    # Sleep for 1 minutes.
+    time.sleep(60)
     continue
