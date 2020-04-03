@@ -2,8 +2,8 @@
 # Used for avoiding certain players / stacks.
 
 # Set URL of Steam user (must be public profile):
-url = "https://steamcommunity.com/id/panozzles/"
-dotabuff_url = "https://www.dotabuff.com/players/55239776"
+url = ""
+dotabuff_url = ""
 
 ##### PACKAGES ##### 
 import requests                                 # package for downloading page
